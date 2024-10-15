@@ -1,0 +1,23 @@
+# ignore file
+*.iml
+*.log
+*.logs
+*.ipr
+*.classpath
+*.project
+
+# ignore direcoties
+/c:/
+**/out/**
+/logs/
+**/contiperf-report/
+**/build/
+.gradle/
+.idea/
+.settings/
+bin/
+*.log
+jdbc.properties
+
+**/target/
+.flattened-pom.xml
