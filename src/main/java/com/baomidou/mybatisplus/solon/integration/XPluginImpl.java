@@ -2,7 +2,7 @@ package com.baomidou.mybatisplus.solon.integration;
 
 import com.baomidou.mybatisplus.core.toolkit.reflect.GenericTypeUtils;
 import com.baomidou.mybatisplus.extension.compatible.CompatibleHelper;
-import com.baomidou.mybatisplus.extension.compatible.SolonCompatibleSet;
+import com.baomidou.mybatisplus.extension.spi.SolonCompatibleSet;
 import com.baomidou.mybatisplus.solon.integration.aot.MybatisPlusRuntimeNativeRegistrar;
 import org.noear.solon.aot.RuntimeNativeRegistrar;
 import org.noear.solon.core.AppContext;
