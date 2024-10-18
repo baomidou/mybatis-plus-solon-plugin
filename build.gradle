@@ -49,6 +49,7 @@ subprojects {
         // orm db
         api("com.baomidou:mybatis-plus-extension:${mybatisPlusVersion}")
 
+        testImplementation("com.baomidou:mybatis-plus-extension:${mybatisPlusVersion}")
         testImplementation("org.noear:solon-test:${solonVersion}")
         testImplementation("io.github.classgraph:classgraph:4.8.176")
         testImplementation("com.zaxxer:HikariCP:4.0.3")

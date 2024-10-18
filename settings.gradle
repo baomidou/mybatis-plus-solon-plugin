@@ -1,4 +1,4 @@
-rootProject.name = 'mybatis-plus-solon'
+rootProject.name = 'mybatis-plus-solon-plugin'
 
 include 'mybatis-plus-solon-plugin'
 include 'mybatis-plus-solon-plugin-test'
