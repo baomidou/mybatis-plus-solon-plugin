@@ -6,7 +6,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import java.lang.reflect.Method;
 
 public class SolonMybatisMapperProxy<T> extends MybatisMapperProxy<T> {
-
     private final SqlSessionFactory factory;
     private final Class<T> mapperInterface;
     private final SqlSession sqlSession;

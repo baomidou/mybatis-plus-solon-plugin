@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SolonSqlSession implements SqlSession {
-
     private final SqlSessionFactory sqlSessionFactory;
     private final SqlSession sqlSessionProxy;
 

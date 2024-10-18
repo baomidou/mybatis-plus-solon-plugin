@@ -28,7 +28,6 @@ import java.util.Map;
  * @since 1.5
  */
 public class MybatisAdapterPlus extends MybatisAdapterDefault {
-
     MybatisSqlSessionFactoryBuilder factoryBuilderPlus;
     GlobalConfig globalConfig;
     SqlSession sqlSession;

@@ -1,0 +1,8 @@
+description "mybatis-plus solon plugin"
+
+dependencies {
+    api("com.baomidou:mybatis-plus-extension")
+    api("org.noear:mybatis-solon-plugin")
+    api("org.noear:solon-aot")
+
+}

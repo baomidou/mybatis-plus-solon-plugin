@@ -1,0 +1,6 @@
+description "mybatis-plus solon plugin test"
+
+dependencies {
+    api project(":mybatis-plus-solon-plugin")
+
+}

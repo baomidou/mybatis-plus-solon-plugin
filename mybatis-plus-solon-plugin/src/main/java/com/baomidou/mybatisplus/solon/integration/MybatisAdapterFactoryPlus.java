@@ -12,6 +12,7 @@ import org.noear.solon.core.Props;
  * @since 1.5
  */
 public class MybatisAdapterFactoryPlus implements MybatisAdapterFactory {
+
     @Override
     public MybatisAdapter create(BeanWrap dsWrap) {
         return new MybatisAdapterPlus(dsWrap);
