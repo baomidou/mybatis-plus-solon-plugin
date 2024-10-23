@@ -1,16 +1,14 @@
 package com.baomidou.mybatisplus.solon.integration;
 
 import com.baomidou.mybatisplus.core.toolkit.reflect.GenericTypeUtils;
-import com.baomidou.mybatisplus.extension.compatible.CompatibleHelper;
-import com.baomidou.mybatisplus.extension.spi.SolonCompatibleSet;
 import com.baomidou.mybatisplus.solon.integration.aot.MybatisPlusRuntimeNativeRegistrar;
+import org.apache.ibatis.solon.integration.MybatisAdapterManager;
 import org.noear.solon.aot.RuntimeNativeRegistrar;
 import org.noear.solon.core.AppContext;
+import org.noear.solon.core.Plugin;
 import org.noear.solon.core.runtime.NativeDetector;
 import org.noear.solon.core.util.ClassUtil;
 import org.noear.solon.core.util.GenericUtil;
-import org.apache.ibatis.solon.integration.MybatisAdapterManager;
-import org.noear.solon.core.Plugin;
 
 /**
  * @author noear
@@ -24,9 +22,6 @@ public class XPluginImpl implements Plugin {
         // 此插件的 solon.plugin.priority 会大于 mybatis-solon-plugin 的值
         //
         MybatisAdapterManager.setAdapterFactory(new MybatisAdapterFactoryPlus());
-
-        // 注入兼容配置
-        CompatibleHelper.setCompatibleSet(new SolonCompatibleSet());
 
         // 提供反射处理类
         GenericTypeUtils.setGenericTypeResolver((GenericUtil::resolveTypeArguments));

@@ -16,13 +16,11 @@
 package com.baomidou.mybatisplus.extension.spi;
 
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.baomidou.mybatisplus.extension.compatible.CompatibleSet;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.noear.solon.core.util.GenericUtil;
 import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.data.tran.TranUtils;
 
