@@ -48,6 +48,15 @@ public abstract class CrudRepository<M extends BaseMapper<T>, T> extends Abstrac
     }
 
     /**
+     * 设置 baseMapper（用于支持 Db 注入 CrudRepository）
+     *
+     * @author noear
+     * */
+    public void setBaseMapper(M baseMapper) {
+        this.baseMapper = baseMapper;
+    }
+
+    /**
      * 批量插入
      *
      * @param entityList ignore

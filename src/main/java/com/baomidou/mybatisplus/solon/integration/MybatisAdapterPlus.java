@@ -3,8 +3,11 @@ package com.baomidou.mybatisplus.solon.integration;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.MybatisSqlSessionFactoryBuilder;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.override.SolonMybatisMapperProxy;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
+import com.baomidou.mybatisplus.extension.repository.CrudRepository;
+import com.baomidou.mybatisplus.extension.repository.IRepository;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -105,6 +108,7 @@ public class MybatisAdapterPlus extends MybatisAdapterDefault {
         return sqlSession;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T getMapper(Class<T> mapperClz) {
         Object mapper = mapperCached.get(mapperClz);
@@ -134,13 +138,72 @@ public class MybatisAdapterPlus extends MybatisAdapterDefault {
     }
 
     @Override
-    public void injectTo(VarHolder varH) {
-        super.injectTo(varH);
-
-        //@Db("db1") SqlSessionFactory factory;
-        if (GlobalConfig.class.isAssignableFrom(varH.getType())) {
-            varH.setValue(this.getGlobalConfig());
+    public void injectTo(VarHolder vh) {
+        if (IRepository.class.isAssignableFrom(vh.getType())) {
+            vh.context().getWrapAsync(vh.getType(), serviceBw -> {
+                if (serviceBw.raw() instanceof CrudRepository) {
+                    //如果是 ServiceImpl
+                    injectService(vh, serviceBw);
+                } else {
+                    //如果不是 ServiceImpl
+                    vh.setValue(serviceBw.get());
+                }
+            });
             return;
         }
+
+        //@Db("db1") SqlSessionFactory factory;
+        if (GlobalConfig.class.isAssignableFrom(vh.getType())) {
+            vh.setValue(this.getGlobalConfig());
+            return;
+        }
+
+        super.injectTo(vh);
+
+
+    }
+
+    /**
+     * 服务缓存
+     */
+    private Map<Class<?>, CrudRepository> repositoryCached = new HashMap<>();
+
+    /**
+     * 注入服务 IService
+     */
+    @SuppressWarnings("unchecked")
+    private void injectService(VarHolder vh, BeanWrap serviceBw) {
+        CrudRepository repository = serviceBw.raw();
+
+        if (repositoryCached.containsKey(vh.getType())) {
+            //从缓存获取
+            repository = repositoryCached.get(vh.getType());
+        } else {
+            Object baseMapperOld = repository.getBaseMapper();
+
+            if (baseMapperOld != null) {
+                Class<?> baseMapperClass = null;
+                for (Class<?> clz : baseMapperOld.getClass().getInterfaces()) {
+                    //baseMapperOld.getClass() 是个代理类，所以要从基类接口拿
+                    if (BaseMapper.class.isAssignableFrom(clz)) {
+                        baseMapperClass = clz;
+                        break;
+                    }
+                }
+
+                if (baseMapperClass != null) {
+                    //如果有 baseMapper ，说明正常；；创建新实例，并更换 baseMapper
+                    repository = serviceBw.create();
+
+                    BaseMapper baseMapper = (BaseMapper) this.getMapper(baseMapperClass);
+                    repository.setBaseMapper(baseMapper);
+
+                    //缓存
+                    repositoryCached.put(vh.getType(), repository);
+                }
+            }
+        }
+
+        vh.setValue(repository);
     }
 }
