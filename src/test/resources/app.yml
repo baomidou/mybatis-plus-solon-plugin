@@ -1,24 +1,30 @@
-server:
-    port: 6040
+solon.app:
+    name: demoapp
+    group: demo
 
-# 配置数据源
+solon.output.meta: 1
+
 solon.dataSources:
     db1!:
         class: "com.zaxxer.hikari.HikariDataSource"
-        jdbcUrl: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=true
-        driverClassName: com.mysql.cj.jdbc.Driver
-        username: root
-        password: 1234
+        jdbcUrl: "jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL;DATABASE_TO_LOWER=TRUE;IGNORECASE=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+        driverClassName: "org.h2.Driver"
 
-mybatis:
-    db1:
-        mappers:
-            - "demo.dso.mapper.*"
-        configuration:
-            cacheEnabled: false
-            mapUnderscoreToCamelCase: true
-        globalConfig:
-            banner: false
-            metaObjectHandler: "demo.dso.MetaObjectHandlerImpl"
-            dbConfig:
-                logicDeleteField: "deleted"
+#默认
+mybatis.db1:
+    typeAliases:    #支持包名 或 类名 //支持 ** 和 *
+        - "demo.model"
+    mappers:        #支持包名 或 类名 或 xml（.xml结尾）//支持 ** 和 *
+        - "demo.dso.mapper"
+        - "classpath:mapper/*.xml"
+    configuration:
+        cacheEnabled: false
+        mapperVerifyEnabled: false
+        mapUnderscoreToCamelCase: true
+        logImpl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    globalConfig:
+        banner: false
+        metaObjectHandler: "demo.dso.MetaObjectHandlerImpl"
+        dbConfig:
+            logicDeleteField: "deleted"
+            logicDeleteValue: "2"

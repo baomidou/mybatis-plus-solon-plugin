@@ -1,10 +1,12 @@
 package demo.dso.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import demo.model.User;
+import demo.model.UserModel;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author 颖
+ * @author noear 2022/4/5 created
  */
-public interface UserMapper extends BaseMapper<User> {
+@Mapper
+public interface UserMapper extends BaseMapper<UserModel> {
 }
