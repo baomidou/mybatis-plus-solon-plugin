@@ -9,6 +9,7 @@ import org.noear.solon.test.SolonTest;
 
 @SolonTest(DemoApp.class)
 public class PageTest extends HttpTester {
+
     @Test
     public void test() throws Exception {
         String json = path("/page/test").get();

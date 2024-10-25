@@ -31,7 +31,7 @@ public class PlusTest {
 
     @Test
     public void selectOne() {
-        AppxModel app = appxMapper2.selectOne(new QueryWrapper<AppxModel>().eq("app_id",2));
+        AppxModel app = appxMapper2.selectOne(new QueryWrapper<AppxModel>().eq("app_id", 2));
         System.out.println(app);
 
         assert app != null;

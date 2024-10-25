@@ -19,5 +19,4 @@ public class DemoController {
     public AppxModel test(){
         return appxMapper.appx_get();
     }
-
 }

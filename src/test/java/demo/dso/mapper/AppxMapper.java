@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Mapper
 public interface AppxMapper {
+
     AppxModel appx_get();
 
     Page<AppxModel> appx_get_page(Page<AppxModel> page);

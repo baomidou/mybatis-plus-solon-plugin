@@ -8,6 +8,7 @@ import org.noear.solon.annotation.Component;
  */
 @Component
 public class TestService extends TestServiceBase {
+
     public AppxModel getApp(int app_id) throws Exception {
         return sqlMapper1.appx_get2(app_id);
     }

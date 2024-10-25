@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class IGenericTypeResolverImplTest {
 
-
     @Test
     public void resolveTypeArguments() {
         System.out.println(Arrays.toString(GenericUtil.resolveTypeArguments(DemoImpl.class, Map.class)));
@@ -21,6 +20,7 @@ public class IGenericTypeResolverImplTest {
     }
 
     private interface Demo<T> {}
+
     private abstract static class DemoImpl implements Map<Integer, String>, Demo<Double> {
 
     }

@@ -1,12 +1,11 @@
 package features;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import demo.DemoApp;
 import demo.dso.mapper.AppxMapperPlus;
 import demo.dso.mapper.AppxMapperPlusEx;
-import demo.dso.service.AppServicePlus;
+import demo.dso.service.AppxService;
 import demo.model.AppxModel;
 import org.apache.ibatis.solon.annotation.Db;
 import org.junit.jupiter.api.Test;
@@ -19,10 +18,8 @@ import org.noear.solon.test.SolonTest;
 @SolonTest(DemoApp.class)
 public class PlusServiceTest {
 
-    @Db
-    AppServicePlus appServicePlus;
     @Inject
-    AppServicePlus appServicePlus2;
+    AppxService appxService;
 
     @Db
     AppxMapperPlus appxMapperPlus;
@@ -36,7 +33,7 @@ public class PlusServiceTest {
 
     @Test
     public void selectById() {
-        AppxModel app = appServicePlus.getById(2);
+        AppxModel app = appxService.getById(2);
         System.out.println(app);
 
         assert app != null;
@@ -63,7 +60,7 @@ public class PlusServiceTest {
 
     @Test
     public void selectOne() {
-        AppxModel app = appServicePlus.getOne(new QueryWrapper<AppxModel>().eq("app_id",2));
+        AppxModel app = appxService.getOne(2);
         System.out.println(app);
 
         assert app != null;
@@ -73,16 +70,14 @@ public class PlusServiceTest {
 
     @Test
     public void selectPage() {
-        Page<AppxModel> page = new Page<>(1, 10);
-        IPage<AppxModel> iPage = appServicePlus.page(page, new QueryWrapper<>());
+        IPage<AppxModel> page = appxService.page(new Page<>(1, 10));
 
+        assert page != null;
 
-        assert iPage != null;
+        System.out.println("iPage.getRecords().size(): " + page.getRecords().size());
+        assert !page.getRecords().isEmpty();
 
-        System.out.println("iPage.getRecords().size(): " + iPage.getRecords().size());
-        assert iPage.getRecords().size() > 0;
-
-        System.out.println("iPage.getTotal(): " + iPage.getTotal());
-        assert iPage.getTotal() > 0;
+        System.out.println("iPage.getTotal(): " + page.getTotal());
+        assert page.getTotal() > 0;
     }
 }
