@@ -6,7 +6,7 @@ apply plugin: 'signing'
 buildscript {
     ext {
         mybatisPlusVersion = "3.5.9"
-        solonVersion = "3.0.1"
+        solonVersion = "3.0.2"
     }
 
     // 仓库配置
@@ -42,9 +42,13 @@ dependencies {
     api("org.noear:mybatis-solon-plugin:${solonVersion}")
     api("org.noear:solon-aot:${solonVersion}")
 
+    testImplementation("com.baomidou:mybatis-plus-jsqlparser-4.9:${mybatisPlusVersion}")
     testImplementation("org.noear:solon-test:${solonVersion}")
-    testImplementation("io.github.classgraph:classgraph:4.8.176")
+    testImplementation("org.noear:solon-data-sqlutils:${solonVersion}")
+    testImplementation("org.noear:solon-web:${solonVersion}")
     testImplementation("com.zaxxer:HikariCP:4.0.3")
+    testImplementation("com.h2database:h2:2.3.232")
+    testImplementation("org.projectlombok:lombok:1.18.34")
 }
 
 // 编译环境 JDK-1.8+

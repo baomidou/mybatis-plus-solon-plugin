@@ -1,4 +1,4 @@
-package features;
+package labs;
 
 
 import com.baomidou.mybatisplus.core.mapper.Mapper;
@@ -21,7 +21,7 @@ public class IGenericTypeResolverImplTest {
     }
 
     private interface Demo<T> {}
-    private abstract static class DemoImpl implements Map<Integer, String>, IGenericTypeResolverImplTest.Demo<Double> {
+    private abstract static class DemoImpl implements Map<Integer, String>, Demo<Double> {
 
     }
 }
