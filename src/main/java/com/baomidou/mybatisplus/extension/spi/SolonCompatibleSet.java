@@ -21,6 +21,7 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.noear.solon.Solon;
 import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.data.tran.TranUtils;
 
@@ -74,6 +75,16 @@ public class SolonCompatibleSet implements CompatibleSet {
     @Override
     public InputStream getInputStream(String path) throws Exception {
         return ResourceUtil.findResource(path).openStream();
+    }
+
+    @Override
+    public <T> T getBean(Class<T> clz) {
+        return Solon.context().getBean(clz);
+    }
+
+    @Override
+    public Object getProxyTargetObject(Object mapper) {
+        return mapper;
     }
 
 }
