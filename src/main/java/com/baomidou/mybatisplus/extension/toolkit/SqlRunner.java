@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2024, baomidou (jobob@qq.com).
+ * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 package com.baomidou.mybatisplus.extension.toolkit;
 
-import com.baomidou.mybatisplus.core.assist.ISqlRunner;
+import com.baomidou.mybatisplus.core.assist.AbstractSqlRunner;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
@@ -32,20 +31,47 @@ import java.util.Optional;
 
 /**
  * SqlRunner 执行 SQL
+ * <p>
+ * 自3.5.12开始,(当传入的参数是单参数时,支持使用Map,Array,List,JavaBean)
+ * <li>当参数为 Map 时可通过{key}进行属性访问
+ * <li>当参数为 JavaBean 时可通过{property}进行属性访问
+ * <li>当参数为 List 时直接访问索引 {0} </li>
+ * <li>当参数为 Array 时直接访问索引 {0} </li>
+ * </p>
  *
- * @author Caratacus
+ * @author Caratacus, nieqiurong
  * @since 2016-12-11
  */
-public class SqlRunner implements ISqlRunner {
+public class SqlRunner extends AbstractSqlRunner {
 
-    // 单例Query
+    /**
+     * 日志对象
+     */
+    private static final Log LOG = LogFactory.getLog(SqlRunner.class);
+
+    /**
+     * 默认实例 (使用{@link SqlHelper#FACTORY}进行会话操作)
+     */
     public static final SqlRunner DEFAULT = new SqlRunner();
-    private final Log log = LogFactory.getLog(SqlRunner.class);
+
+    /**
+     * 实体类 (需要被扫描注入的实体对象,当未指定时,将使用{@link SqlHelper#FACTORY}进行会话操作)
+     *
+     * @see com.baomidou.mybatisplus.core.metadata.TableInfoHelper#initTableInfo(MapperBuilderAssistant, Class)
+     */
     private Class<?> clazz;
 
+    /**
+     * 默认构造,使用{@link SqlHelper#FACTORY}进行会话操作
+     */
     public SqlRunner() {
     }
 
+    /**
+     * 通过实体类构造
+     *
+     * @param clazz 实体类
+     */
     public SqlRunner(Class<?> clazz) {
         this.clazz = clazz;
     }
@@ -53,7 +79,7 @@ public class SqlRunner implements ISqlRunner {
     /**
      * 获取默认的SqlQuery(适用于单库)
      *
-     * @return ignore
+     * @return this
      */
     public static SqlRunner db() {
         return DEFAULT;
@@ -62,13 +88,20 @@ public class SqlRunner implements ISqlRunner {
     /**
      * 根据当前class对象获取SqlQuery(适用于多库)
      *
-     * @param clazz ignore
-     * @return ignore
+     * @param clazz 实体类
+     * @return this
      */
     public static SqlRunner db(Class<?> clazz) {
         return new SqlRunner(clazz);
     }
 
+    /**
+     * 执行插入语句
+     *
+     * @param sql  指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @return 插入结果
+     */
     @Tran
     @Override
     public boolean insert(String sql, Object... args) {
@@ -80,6 +113,13 @@ public class SqlRunner implements ISqlRunner {
         }
     }
 
+    /**
+     * 执行删除语句
+     *
+     * @param sql  指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @return 删除结果
+     */
     @Tran
     @Override
     public boolean delete(String sql, Object... args) {
@@ -92,33 +132,12 @@ public class SqlRunner implements ISqlRunner {
     }
 
     /**
-     * 获取sqlMap参数
+     * 执行更新语句
      *
-     * @param sql  指定参数的格式: {0}, {1}
-     * @param args 仅支持String
-     * @return ignore
+     * @param sql  指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @return 更新结果
      */
-    private Map<String, String> sqlMap(String sql, Object... args) {
-        Map<String, String> sqlMap = CollectionUtils.newHashMapWithExpectedSize(1);
-        sqlMap.put(SQL, StringUtils.sqlArgsFill(sql, args));
-        return sqlMap;
-    }
-
-    /**
-     * 获取sqlMap参数
-     *
-     * @param sql  指定参数的格式: {0}, {1}
-     * @param page 分页模型
-     * @param args 仅支持String
-     * @return ignore
-     */
-    private Map<String, Object> sqlMap(String sql, IPage<?> page, Object... args) {
-        Map<String, Object> sqlMap = CollectionUtils.newHashMapWithExpectedSize(2);
-        sqlMap.put(PAGE, page);
-        sqlMap.put(SQL, StringUtils.sqlArgsFill(sql, args));
-        return sqlMap;
-    }
-
     @Tran
     @Override
     public boolean update(String sql, Object... args) {
@@ -134,9 +153,9 @@ public class SqlRunner implements ISqlRunner {
      * 根据sql查询Map结果集
      * <p>SqlRunner.db().selectList("select * from tbl_user where name={0}", "Caratacus")</p>
      *
-     * @param sql  sql语句，可添加参数，格式：{0},{1}
-     * @param args 只接受String格式
-     * @return ignore
+     * @param sql  sql语句，可添加参数，指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数列表
+     * @return 结果集
      */
     @Override
     public List<Map<String, Object>> selectList(String sql, Object... args) {
@@ -150,11 +169,11 @@ public class SqlRunner implements ISqlRunner {
 
     /**
      * 根据sql查询一个字段值的结果集
-     * <p>注意：该方法只会返回一个字段的值， 如果需要多字段，请参考{@code selectList()}</p>
+     * <p>注意：该方法只会返回一个字段的值， 如果需要多字段，请参考{@link #selectList(String, Object...)}</p>
      *
-     * @param sql  sql语句，可添加参数，格式：{0},{1}
-     * @param args 只接受String格式
-     * @return ignore
+     * @param sql  sql语句，可添加参数，指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @return 结果集
      */
     @Override
     public List<Object> selectObjs(String sql, Object... args) {
@@ -168,17 +187,24 @@ public class SqlRunner implements ISqlRunner {
 
     /**
      * 根据sql查询一个字段值的一条结果
-     * <p>注意：该方法只会返回一个字段的值， 如果需要多字段，请参考{@code selectOne()}</p>
+     * <p>注意：该方法只会返回一个字段的值， 如果需要多字段，请参考{@link #selectOne(String, Object...)}</p>
      *
-     * @param sql  sql语句，可添加参数，格式：{0},{1}
-     * @param args 只接受String格式
-     * @return ignore
+     * @param sql  sql语句，可添加参数，指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @return 结果
      */
     @Override
     public Object selectObj(String sql, Object... args) {
-        return SqlHelper.getObject(log, selectObjs(sql, args));
+        return SqlHelper.getObject(LOG, selectObjs(sql, args));
     }
 
+    /**
+     * 查询总数
+     *
+     * @param sql  sql语句，可添加参数，指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @return 总记录数
+     */
     @Override
     public long selectCount(String sql, Object... args) {
         SqlSession sqlSession = sqlSession();
@@ -189,11 +215,27 @@ public class SqlRunner implements ISqlRunner {
         }
     }
 
+    /**
+     * 获取单条记录
+     *
+     * @param sql  sql语句，可添加参数，指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @return 单行结果集 (当执行语句返回多条记录时,只会选取第一条记录)
+     */
     @Override
     public Map<String, Object> selectOne(String sql, Object... args) {
-        return SqlHelper.getObject(log, selectList(sql, args));
+        return SqlHelper.getObject(LOG, selectList(sql, args));
     }
 
+    /**
+     * 分页查询
+     *
+     * @param page 分页对象
+     * @param sql  sql语句，可添加参数，指定参数的格式: {0}, {1} 或者 {property1}, {property2}
+     * @param args 参数
+     * @param <E>  E
+     * @return 分页数据
+     */
     @Override
     public <E extends IPage<Map<String, Object>>> E selectPage(E page, String sql, Object... args) {
         if (null == page) {
