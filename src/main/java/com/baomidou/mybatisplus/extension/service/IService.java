@@ -16,7 +16,7 @@
 package com.baomidou.mybatisplus.extension.service;
 
 import com.baomidou.mybatisplus.extension.repository.IRepository;
-import org.noear.solon.data.annotation.Tran;
+import org.noear.solon.data.annotation.Transaction;
 
 import java.util.Collection;
 
@@ -33,7 +33,7 @@ public interface IService<T> extends IRepository<T> {
      *
      * @param entityList 实体对象集合
      */
-    @Tran
+    @Transaction
     default boolean saveBatch(Collection<T> entityList) {
         return saveBatch(entityList, DEFAULT_BATCH_SIZE);
     }
@@ -43,7 +43,7 @@ public interface IService<T> extends IRepository<T> {
      *
      * @param entityList 实体对象集合
      */
-    @Tran
+    @Transaction
     default boolean saveOrUpdateBatch(Collection<T> entityList) {
         return saveOrUpdateBatch(entityList, DEFAULT_BATCH_SIZE);
     }
@@ -55,7 +55,7 @@ public interface IService<T> extends IRepository<T> {
      * @return 删除结果
      * @since 3.5.0
      */
-    @Tran
+    @Transaction
     default boolean removeBatchByIds(Collection<?> list) {
         return removeByIds(list);
     }
@@ -65,7 +65,7 @@ public interface IService<T> extends IRepository<T> {
      *
      * @param entityList 实体对象集合
      */
-    @Tran
+    @Transaction
     default boolean updateBatchById(Collection<T> entityList) {
         return updateBatchById(entityList, DEFAULT_BATCH_SIZE);
     }

@@ -6,11 +6,11 @@
 
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-solon-plugin</artifactId>
-    <version>3.5.11</version>
+    <version>3.5.14</version>
     <packaging>jar</packaging>
 
     <properties>
-        <solon.version>3.0.2</solon.version>
+        <solon.version>3.7.2</solon.version>
     </properties>
 
     <dependencies>
