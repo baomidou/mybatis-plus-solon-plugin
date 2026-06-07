@@ -5,7 +5,7 @@ apply plugin: 'signing'
 // 编译脚本
 buildscript {
     ext {
-        mybatisPlusVersion = "3.5.14"
+        mybatisPlusVersion = "3.5.16"
         solonVersion = "3.7.2"
     }
 
