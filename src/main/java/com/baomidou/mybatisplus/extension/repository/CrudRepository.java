@@ -26,7 +26,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.apache.ibatis.binding.MapperMethod;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.data.annotation.Tran;
+import org.noear.solon.data.annotation.Transaction;
 
 import java.util.Collection;
 
@@ -63,7 +63,7 @@ public abstract class CrudRepository<M extends BaseMapper<T>, T> extends Abstrac
      * @param batchSize  ignore
      * @return ignore
      */
-    @Tran
+    @Transaction
     @Override
     public boolean saveBatch(Collection<T> entityList, int batchSize) {
         String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
@@ -81,7 +81,7 @@ public abstract class CrudRepository<M extends BaseMapper<T>, T> extends Abstrac
         return SqlHelper.getSqlStatement(this.getMapperClass(), sqlMethod);
     }
 
-    @Tran
+    @Transaction
     @Override
     public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(this.getEntityClass());
@@ -99,7 +99,7 @@ public abstract class CrudRepository<M extends BaseMapper<T>, T> extends Abstrac
         });
     }
 
-    @Tran
+    @Transaction
     @Override
     public boolean updateBatchById(Collection<T> entityList, int batchSize) {
         String sqlStatement = getSqlStatement(SqlMethod.UPDATE_BY_ID);
