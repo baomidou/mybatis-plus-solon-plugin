@@ -1,0 +1,22 @@
+solon.app:
+    name: native-demo
+
+server.port: 18081
+
+solon.dataSources:
+    db1!:
+        class: "com.zaxxer.hikari.HikariDataSource"
+        jdbcUrl: "jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=USER"
+        driverClassName: "org.h2.Driver"
+
+mybatis.db1:
+    typeAliases:
+        - "demo.model"
+    mappers:
+        - "demo.mapper"
+        - "classpath:mapper/*.xml"
+    configuration:
+        mapUnderscoreToCamelCase: true
+        logImpl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    globalConfig:
+        banner: false
