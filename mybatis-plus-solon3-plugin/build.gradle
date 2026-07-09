@@ -1,0 +1,28 @@
+description = "MybatisPlus Solon Plugin (solon 3.x LTS)"
+
+// 与 mybatis-plus-solon-plugin 共享同一套源码与测试，按 solon 3.x LTS 依赖编译发布
+sourceSets {
+    main {
+        java.srcDirs = ["${projectDir}/../mybatis-plus-solon-plugin/src/main/java"]
+        resources.srcDirs = ["${projectDir}/../mybatis-plus-solon-plugin/src/main/resources"]
+    }
+    test {
+        java.srcDirs = ["${projectDir}/../mybatis-plus-solon-plugin/src/test/java"]
+        resources.srcDirs = ["${projectDir}/../mybatis-plus-solon-plugin/src/test/resources"]
+    }
+}
+
+// 依赖配置
+dependencies {
+    api("com.baomidou:mybatis-plus-extension:${mybatisPlusVersion}")
+    api("org.noear:mybatis-solon-plugin:${solon3Version}")
+
+    testImplementation("com.baomidou:mybatis-plus-jsqlparser-4.9:${mybatisPlusVersion}")
+    testImplementation("org.noear:solon-test:${solon3Version}")
+    testImplementation("org.noear:solon-data-sqlutils:${solon3Version}")
+    testImplementation("org.noear:solon-web:${solon3Version}")
+    testImplementation("com.zaxxer:HikariCP:4.0.3")
+    testImplementation("com.h2database:h2:2.2.224")
+    testImplementation("org.projectlombok:lombok:1.18.34")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
+}
