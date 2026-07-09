@@ -1,1 +1,5 @@
-rootProject.name = 'mybatis-plus-solon-plugin'
+rootProject.name = 'mybatis-plus-solon-parent'
+
+include 'mybatis-plus-solon-plugin'
+include 'mybatis-plus-solon3-plugin'
+include 'mybatis-plus-solon-native-image'

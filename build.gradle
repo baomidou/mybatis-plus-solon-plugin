@@ -1,12 +1,11 @@
-apply plugin: 'java-library'
-apply plugin: 'com.vanniktech.maven.publish'
-apply plugin: 'signing'
-
 // 编译脚本
 buildscript {
     ext {
-        mybatisPlusVersion = "3.5.16"
-        solonVersion = "3.7.2"
+        mybatisPlusVersion = "3.5.17"
+        // solon 3.x LTS 线
+        solon3Version = "3.7.5"
+        // solon 4.x 主线
+        solon4Version = "4.0.3"
     }
 
     // 仓库配置
@@ -22,79 +21,68 @@ buildscript {
     }
 }
 
-group APP_GROUP
-version APP_VERSION
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'com.vanniktech.maven.publish'
+    apply plugin: 'signing'
 
-description = "MybatisPlus Solon Plugin"
+    group APP_GROUP
+    version APP_VERSION
 
-// 仓库配置
-repositories {
-    mavenLocal()
-    maven { url 'https://maven.aliyun.com/repository/central' }
-    maven { url 'https://maven.aliyun.com/repository/google' }
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    mavenCentral()
-}
-
-// 依赖配置
-dependencies {
-    api("com.baomidou:mybatis-plus-extension:${mybatisPlusVersion}")
-    api("org.noear:mybatis-solon-plugin:${solonVersion}")
-    api("org.noear:solon-aot:${solonVersion}")
-
-    testImplementation("com.baomidou:mybatis-plus-jsqlparser-4.9:${mybatisPlusVersion}")
-    testImplementation("org.noear:solon-test:${solonVersion}")
-    testImplementation("org.noear:solon-data-sqlutils:${solonVersion}")
-    testImplementation("org.noear:solon-web:${solonVersion}")
-    testImplementation("com.zaxxer:HikariCP:4.0.3")
-    testImplementation("com.h2database:h2:2.3.232")
-    testImplementation("org.projectlombok:lombok:1.18.34")
-}
-
-// 编译环境 JDK-1.8+
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:-serial"
-    options.encoding = 'UTF-8'
-    options.warnings = false
-    options.deprecation = true
-    options.compilerArgs += ["-parameters"]
-}
-
-tasks.withType(GenerateModuleMetadata).configureEach {
-    enabled = false
-}
-
-tasks.register('sourcesJar', Jar) {
-    dependsOn classes
-    archiveClassifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-javadoc {
-    options {
-        encoding "UTF-8"
-        charSet 'UTF-8'
-        author true
-        version true
-        failOnError false
-        links "https://docs.oracle.com/javase/8/docs/api"
+    // 仓库配置
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        mavenCentral()
     }
-}
 
-tasks.withType(MavenPublication).configureEach {
-    doFirst {
-        options.skipCertificateChecks = true
+    // 编译环境 JDK-1.8+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    tasks.named('test') {
+        useJUnitPlatform()
     }
-}
 
-tasks.register('javadocJar', Jar) {
-    archiveClassifier = 'javadoc'
-    from javadoc
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:-serial"
+        options.encoding = 'UTF-8'
+        options.warnings = false
+        options.deprecation = true
+        options.compilerArgs += ["-parameters"]
+    }
+
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        enabled = false
+    }
+
+    tasks.register('sourcesJar', Jar) {
+        dependsOn classes
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    javadoc {
+        options {
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            author true
+            version true
+            failOnError false
+            links "https://docs.oracle.com/javase/8/docs/api"
+        }
+    }
+
+    tasks.withType(MavenPublication).configureEach {
+        doFirst {
+            options.skipCertificateChecks = true
+        }
+    }
+
+    tasks.register('javadocJar', Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc
+    }
 }

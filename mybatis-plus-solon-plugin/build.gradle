@@ -1,0 +1,18 @@
+description = "MybatisPlus Solon Plugin (solon 4.x)"
+
+// 依赖配置
+dependencies {
+    api("com.baomidou:mybatis-plus-extension:${mybatisPlusVersion}")
+    api("org.noear:mybatis-solon-plugin:${solon4Version}")
+
+    testImplementation("com.baomidou:mybatis-plus-jsqlparser-4.9:${mybatisPlusVersion}")
+    testImplementation("org.noear:solon-test:${solon4Version}")
+    testImplementation("org.noear:solon-data-sqlutils:${solon4Version}")
+    testImplementation("org.noear:solon-web:${solon4Version}")
+    testImplementation("com.zaxxer:HikariCP:4.0.3")
+    testImplementation("com.h2database:h2:2.2.224")
+    testImplementation("org.projectlombok:lombok:1.18.34")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
+    // solon-test 4.x 的 junit-platform-engine 为 1.14.x，需对齐 launcher 版本
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.14.4")
+}
