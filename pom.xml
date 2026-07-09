@@ -5,94 +5,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.baomidou</groupId>
-    <artifactId>mybatis-plus-solon-plugin</artifactId>
-    <version>3.5.16</version>
-    <packaging>jar</packaging>
+    <artifactId>mybatis-plus-solon-parent</artifactId>
+    <version>3.5.17</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>mybatis-plus-solon-plugin</module>
+        <module>mybatis-plus-solon3-plugin</module>
+        <module>mybatis-plus-solon-native-image</module>
+    </modules>
 
     <properties>
-        <solon.version>3.7.2</solon.version>
+        <!-- solon 3.x LTS 线 -->
+        <solon3.version>3.7.5</solon3.version>
+        <!-- solon 4.x 主线 -->
+        <solon4.version>4.0.3</solon4.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>mybatis-solon-plugin</artifactId>
-            <version>${solon.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-aot</artifactId>
-            <version>${solon.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-test</artifactId>
-            <version>${solon.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-data-sqlutils</artifactId>
-            <version>${solon.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-web</artifactId>
-            <version>${solon.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.3.232</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>8</source>
+                        <target>8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

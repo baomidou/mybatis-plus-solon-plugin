@@ -1,0 +1,7 @@
+description = "MybatisPlus Solon Native Image (GraalVM AOT)"
+
+// 依赖配置：运行环境由使用方提供（插件 + solon-aot），不传递 solon 版本线
+dependencies {
+    compileOnly("com.baomidou:mybatis-plus-extension:${mybatisPlusVersion}")
+    compileOnly("org.noear:solon-aot:${solon4Version}")
+}

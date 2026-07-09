@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-solon-parent</artifactId>
+        <version>3.5.17</version>
+    </parent>
+
+    <artifactId>mybatis-plus-solon-native-image</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <solon.version>${solon4.version}</solon.version>
+    </properties>
+
+    <!--
+        GraalVM Native Image (AOT) 适配模块：
+        运行环境由使用方提供（mybatis-plus-solon-plugin / mybatis-plus-solon4-plugin + solon-aot），
+        因此依赖均为 provided，不向使用方传递任何 solon 版本线。
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon-aot</artifactId>
+            <version>${solon.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>
