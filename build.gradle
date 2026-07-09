@@ -17,7 +17,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.vanniktech:gradle-maven-publish-plugin:0.29.0")
+        classpath("com.vanniktech:gradle-maven-publish-plugin:0.37.0")
     }
 }
 
@@ -84,5 +84,19 @@ subprojects {
     tasks.register('javadocJar', Jar) {
         archiveClassifier = 'javadoc'
         from javadoc
+    }
+
+    mavenPublishing {
+        publishToMavenCentral()
+        signAllPublications()
+        coordinates(
+                project.group.toString(),
+                project.name,
+                project.version.toString()
+        )
+        pom {
+            name = project.name
+            description = project.description ?: POM_DESCRIPTION
+        }
     }
 }
